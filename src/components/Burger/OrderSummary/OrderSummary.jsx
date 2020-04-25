@@ -1,42 +1,43 @@
-import React, { useEffect } from 'react';
-import Button from '../../UI/Button/Button';
+import React from 'react';
+import styled from 'styled-components';
+import { Modal, Table, Typography } from 'antd';
 
-const OrderSummary = ({ 
-  ingredients, 
-  purchaseCancelled, 
-  purchaseContinued, 
-  totalPrice 
+const { Title, Paragraph } = Typography;
+const { Column } = Table;
+
+const OrderSummary = ({
+  ingredients,
+  purchaseCancelled,
+  purchaseContinued,
+  totalPrice,
+  visible,
 }) => {
-  const ingredientSummary = Object.keys(ingredients)
-    .map(igKey => (
-      <li key={igKey}>{igKey.charAt(0).toUpperCase() + igKey.slice(1)}: {ingredients[igKey]}</li>
-    ));
+  const ingredientSummary = Object.keys(ingredients).map((igKey) => ({
+    ingredient: igKey,
+    amount: ingredients[igKey],
+    key: igKey,
+  }));
 
-  useEffect(() => console.log('[Order Summary]: re-rendered'));
-
-  return(
-    <>
-      <h3>Your order:</h3>
-      <p>A delicious burger with the following ingredients:</p>
-      <ul>
-        {ingredientSummary}
-      </ul>
-      <strong>Total Price: {totalPrice}$</strong>
-      <p>Continue to Checkout?</p>
-      <Button
-        btnType="Success"
-        clicked={purchaseContinued}
-      >
-        CONTINUE
-      </Button>
-      <Button
-        btnType="Danger"
-        clicked={purchaseCancelled}
-      >
-        CANCEL
-      </Button>
-    </>
+  return (
+    <Modal
+      visible={visible}
+      onCancel={purchaseCancelled}
+      onOk={purchaseContinued}
+    >
+      <Title level={3}>Your order:</Title>
+      <Paragraph>A delicious burger with the following ingredients:</Paragraph>
+      <Table dataSource={ingredientSummary} size="small" pagination={false}>
+        <Column title="Ingredient" dataIndex="ingredient" key="ingredient" />
+        <Column title="Amount" dataIndex="amount" key="amount" />
+      </Table>
+      <SummaryParagraph strong>Total Price: {totalPrice}$</SummaryParagraph>
+      <Paragraph>Continue to Checkout?</Paragraph>
+    </Modal>
   );
 };
+
+const SummaryParagraph = styled(Paragraph)`
+  margin-top: 1.5rem;
+`;
 
 export default OrderSummary;
