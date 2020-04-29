@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { decode } from 'jsonwebtoken';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Layout from './containers/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
@@ -13,6 +13,9 @@ import { authSuccess } from './store/actions/auth';
 
 const App = () => {
   const dispatch = useDispatch();
+  const { authenticated } = useSelector((state) => ({
+    authenticated: state.auth.authenticated,
+  }));
 
   useEffect(() => {
     const idToken = sessionStorage.getItem('idToken');
@@ -30,9 +33,11 @@ const App = () => {
           <Switch>
             <Route path="/checkout" component={Checkout} />
             <Route path="/orders" component={Orders} />
-            <Route path="/auth" component={Auth} />
             <Route path="/" exact component={BurgerBuilder} />
+            <Route path="/auth" component={Auth} />
           </Switch>
+
+          <Redirect to={authenticated ? '/' : '/auth'} />
         </Layout>
       </BrowserRouter>
     </>

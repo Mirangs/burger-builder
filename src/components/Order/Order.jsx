@@ -1,4 +1,5 @@
 import React from 'react';
+import { Tag } from 'antd';
 
 import './Order.css';
 
@@ -8,32 +9,25 @@ const Order = ({ ingredients, totalPrice }) => {
   for (let ingredientName in ingredients) {
     transformedIngredients.push({
       name: ingredientName,
-      amount: ingredients[ingredientName]
+      amount: ingredients[ingredientName],
     });
   }
 
-  const ingredientOutput = transformedIngredients.map(ig => {
+  const ingredientOutput = transformedIngredients.map((ig) => {
     return (
-      <span 
-        key={ig.name}
-        style={{
-          textTransform: 'capitalize',
-          display: 'inline-block',
-          margin: '0 8px',
-          border: '1px solid #ccc',
-          padding: '5px',
-        }}
-      >
+      <Tag key={ig.name} color="blue">
         {ig.name} ({ig.amount})
-      </span>
+      </Tag>
     );
   });
 
-  return(
+  return (
     <div className="Order">
       <p>Ingredients: </p>
       <p>{ingredientOutput}</p>
-      <p>Price: <strong>USD {totalPrice}</strong></p>
+      <p>
+        Price: <strong>USD {totalPrice}</strong>
+      </p>
     </div>
   );
 };
