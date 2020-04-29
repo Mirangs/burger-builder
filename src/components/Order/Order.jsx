@@ -26,7 +26,7 @@ const Order = ({ ingredients, totalPrice }) => {
       <p>Ingredients: </p>
       <p>{ingredientOutput}</p>
       <p>
-        Price: <strong>USD {totalPrice}</strong>
+        Price: <strong>${totalPrice}</strong>
       </p>
     </div>
   );
