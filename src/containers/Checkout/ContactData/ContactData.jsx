@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import axios from '../../../axios-order';
-import { Form, Input, Select, Typography, Button } from 'antd';
+import { Form, Input, Select, Typography, Button, message } from 'antd';
 
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../../HOC/withErrorHandler/withErrorHandler';
@@ -44,6 +44,9 @@ const ContactData = ({
       orderData: formData,
     };
     onOrderBurger(request, token);
+    message.success(
+      'Your order was successfully created! Expect an order soon'
+    );
   };
 
   const resetHandler = () => form.resetFields();
@@ -97,9 +100,12 @@ const ContactData = ({
             <Form.Item
               label="Your email"
               name="email"
-              rules={[{ required: true, message: 'Please enter your email!' }]}
+              rules={[
+                { required: true, message: 'Please enter your email!' },
+                { type: 'email', message: 'Please enter correct email!' },
+              ]}
             >
-              <Input type="email" placeholder="Ukraine" />
+              <Input type="email" placeholder="example@mail.com" />
             </Form.Item>
             <Form.Item name="deliveryMethod" label="Delivery Method">
               <Select>
