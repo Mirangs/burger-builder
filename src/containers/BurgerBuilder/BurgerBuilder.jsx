@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import axios from '../../axios-order';
+import { Redirect } from 'react-router-dom';
 
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
@@ -17,6 +18,7 @@ const BurgerBuilder = ({
   onIngredientRemoved,
   onInitIngredients,
   history,
+  authenticated,
 }) => {
   const [purchasing, setPurchasing] = useState(false);
 
@@ -81,6 +83,8 @@ const BurgerBuilder = ({
       ) : (
         <Spinner />
       )}
+
+      {!authenticated && <Redirect to="/auth" />}
     </>
   );
 };
@@ -89,6 +93,7 @@ const mapStateToProps = (state) => ({
   ings: state.burgerBuilder.ingredients,
   totalPrice: state.burgerBuilder.totalPrice,
   err: state.burgerBuilder.err,
+  authenticated: state.auth.authenticated,
 });
 
 const mapDispatchToProps = (dispatch) => ({
