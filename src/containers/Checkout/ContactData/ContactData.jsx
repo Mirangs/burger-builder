@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import * as R from 'ramda';
+import { connect, useSelector } from 'react-redux';
 import axios from '../../../axios-order';
 import { Form, Input, Select, Typography, Button, message } from 'antd';
 
@@ -14,15 +15,6 @@ import './ContactData.css';
 const { Title } = Typography;
 const { Option } = Select;
 
-const orderFormInitialValues = {
-  name: '',
-  street: '',
-  zipCode: '',
-  country: '',
-  email: '',
-  deliveryMethod: 'fastest',
-};
-
 const ContactData = ({
   ingredients,
   totalPrice,
@@ -33,32 +25,49 @@ const ContactData = ({
 }) => {
   const [form] = Form.useForm();
   const [countries, setCountries] = useState([]);
+  const [initialValues, setInitialValues] = useState([]);
+  const [userDataLoading, setUserDataLoading] = useState(false);
+
+  const { id } = useSelector((state) => ({
+    id: state.auth.userId,
+  }));
 
   useEffect(() => {
-    async function fetchCountries() {
+    async function fetchUserInfo() {
+      setUserDataLoading(true);
       try {
-        const res = await fetch('/api/country');
-        const data = await res.json();
-        setCountries(data.data);
+        const userData = (await fetch(`/api/user/by-id/${id}`)).json();
+        const countries = (await fetch('/api/country')).json();
+
+        const res = await Promise.all([userData, countries]);
+        const transformedData = {
+          ...res[0],
+          delivery_method:
+            res[0].delivery_method === false ? 'fastest' : 'cheapest',
+        };
+
+        setInitialValues(R.omit(['user_role_id', 'password'], transformedData));
+        setCountries(res[1]);
       } catch (err) {
-        message.error('Failed to fetch countries');
+        message.error(err);
+      } finally {
+        setUserDataLoading(false);
       }
     }
 
-    fetchCountries();
-  }, [countries]);
+    fetchUserInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const orderHandler = (order) => {
     const formData = order;
-    for (let formElementIdentifier in order) {
-      formData[formElementIdentifier] = order[formElementIdentifier].value;
-    }
     const request = {
       ingredients,
       price: totalPrice,
       orderData: formData,
+      id,
     };
-    onOrderBurger(request, token);
+    onOrderBurger(request);
     message.success(
       'Your order was successfully created! Expect an order soon'
     );
@@ -68,14 +77,14 @@ const ContactData = ({
 
   return (
     <div className="ContactData">
-      {loading ? (
+      {loading || userDataLoading ? (
         <Spinner />
       ) : (
         <>
           <Title level={4}>Enter your contact data</Title>
           <Form
             name="order"
-            initialValues={orderFormInitialValues}
+            initialValues={initialValues}
             onFinish={orderHandler}
             layout="vertical"
             form={form}
@@ -88,6 +97,15 @@ const ContactData = ({
               <Input placeholder="Max" />
             </Form.Item>
             <Form.Item
+              label="Your Contact Phone"
+              name="phone"
+              rules={[
+                { required: true, message: 'Please enter your Contact Phone!' },
+              ]}
+            >
+              <Input type="number" placeholder="+380993650325" />
+            </Form.Item>
+            <Form.Item
               label="Your street"
               name="street"
               rules={[{ required: true, message: 'Please enter your street!' }]}
@@ -96,7 +114,7 @@ const ContactData = ({
             </Form.Item>
             <Form.Item
               label="Your Zip Code"
-              name="zipCode"
+              name="zip_code"
               rules={[
                 { required: true, message: 'Please enter your Zip Code!' },
               ]}
@@ -105,7 +123,7 @@ const ContactData = ({
             </Form.Item>
             <Form.Item
               label="Your country"
-              name="country"
+              name="country_id"
               rules={[
                 { required: true, message: 'Please enter your country!' },
               ]}
@@ -137,7 +155,7 @@ const ContactData = ({
             >
               <Input type="email" placeholder="example@mail.com" />
             </Form.Item>
-            <Form.Item name="deliveryMethod" label="Delivery Method">
+            <Form.Item name="delivery_method" label="Delivery Method">
               <Select>
                 <Option value="fastest">Fastest</Option>
                 <Option value="cheapest">Cheapest</Option>

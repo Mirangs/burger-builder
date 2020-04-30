@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import axios from '../../axios-order';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
 import Order from '../../components/Order/Order';
 import Spinner from '../../components/UI/Spinner/Spinner';
@@ -10,23 +9,16 @@ import * as actions from '../../store/actions/';
 
 import './Orders.css';
 
-const Orders = ({ orders, loading, onFetchOrders }) => {
-  const history = useHistory();
-
+const Orders = ({ orders, loading, onFetchOrders, id }) => {
   useEffect(() => {
-    const token = sessionStorage.getItem('idToken');
-    if (token) {
-      onFetchOrders(token);
-    } else {
-      history.push('/');
-    }
-  }, [history, onFetchOrders]);
+    onFetchOrders(id);
+  }, [id, onFetchOrders]);
 
   let output = <Spinner />;
   if (!loading) {
-    output = orders.map(({ id, ingredients, price }) => (
+    output = orders.map(({ id, ingredients, total_price }) => (
       <li key={id}>
-        <Order ingredients={ingredients} totalPrice={price} />
+        <Order ingredients={ingredients} totalPrice={total_price} />
       </li>
     ));
   }
@@ -37,11 +29,11 @@ const Orders = ({ orders, loading, onFetchOrders }) => {
 const mapStateToProps = (state) => ({
   orders: state.order.orders,
   loading: state.order.loading,
-  token: state.auth.token,
+  id: state.auth.userId,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onFetchOrders: (token) => dispatch(actions.fetchOrders(token)),
+  onFetchOrders: (id) => dispatch(actions.fetchOrders(id)),
 });
 
 export default connect(
