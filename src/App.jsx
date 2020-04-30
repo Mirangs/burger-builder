@@ -19,11 +19,11 @@ const App = () => {
   }));
 
   useEffect(() => {
-    const idToken = sessionStorage.getItem('idToken');
-    const decoded = idToken && decode(idToken);
+    const token = sessionStorage.getItem('token');
+    const decoded = token && decode(token);
 
     if (decoded) {
-      dispatch(authSuccess(idToken, decoded.user_id));
+      dispatch(authSuccess(token, decoded.id));
     }
   }, [dispatch]);
 
