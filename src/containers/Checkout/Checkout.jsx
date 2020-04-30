@@ -30,7 +30,7 @@ const Checkout = ({
 
   return (
     <div>
-      {Object.keys(ingredients).length === 0 || purchased ? (
+      {ingredients.length === 0 || purchased ? (
         <Redirect to="/" />
       ) : (
         <CheckoutSummary

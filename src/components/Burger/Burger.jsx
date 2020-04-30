@@ -5,21 +5,19 @@ import './Burger.css';
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 
 const Burger = ({ ingredients }) => {
-  let transformedIngredients = Object.keys(ingredients)
-        .map(igKey => {
-          return [...Array(ingredients[igKey])].map((_, i) => (
-            <BurgerIngredient key={igKey + i} type={igKey} />
-          ))
-        })
-        .reduce((arr, el) => {
-          return arr.concat(el);
-        }, []);
+  let transformedIngredients = ingredients.reduce((acc, ing, ind) => {
+    const res = [];
+    for (let i = 0; i < ing.amount; i++) {
+      res.push(<BurgerIngredient key={i + ind} type={ing.name} />);
+    }
+    return acc.concat([...res]);
+  }, []);
 
   if (transformedIngredients.length === 0) {
     transformedIngredients = <p>Please start adding ingredients!</p>;
   }
 
-  return(
+  return (
     <div className="Burger">
       <BurgerIngredient type="bread-top" />
       {transformedIngredients}

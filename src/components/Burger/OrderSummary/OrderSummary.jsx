@@ -12,10 +12,10 @@ const OrderSummary = ({
   totalPrice,
   visible,
 }) => {
-  const ingredientSummary = Object.keys(ingredients).map((igKey) => ({
-    ingredient: igKey,
-    amount: ingredients[igKey],
-    key: igKey,
+  const ingredientSummary = ingredients.map((ing) => ({
+    ingredient: ing.name,
+    amount: ing.amount,
+    key: ing.id,
   }));
 
   return (

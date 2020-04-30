@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -32,6 +32,21 @@ const ContactData = ({
   token,
 }) => {
   const [form] = Form.useForm();
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() => {
+    async function fetchCountries() {
+      try {
+        const res = await fetch('/api/country');
+        const data = await res.json();
+        setCountries(data.data);
+      } catch (err) {
+        message.error('Failed to fetch countries');
+      }
+    }
+
+    fetchCountries();
+  }, [countries]);
 
   const orderHandler = (order) => {
     const formData = order;
@@ -95,7 +110,22 @@ const ContactData = ({
                 { required: true, message: 'Please enter your country!' },
               ]}
             >
-              <Input placeholder="Ukraine" />
+              <Select
+                showSearch
+                placeholder="Enter country"
+                optionFilterProp="children"
+                filterOption={(input, option) =>
+                  option.children.toLowerCase().indexOf(input.toLowerCase()) >=
+                  0
+                }
+              >
+                {countries.map((country) => (
+                  <Select.Option
+                    value={country.id}
+                    key={country.id}
+                  >{`${country.name} (${country.code})`}</Select.Option>
+                ))}
+              </Select>
             </Form.Item>
             <Form.Item
               label="Your email"

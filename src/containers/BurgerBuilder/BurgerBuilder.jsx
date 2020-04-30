@@ -23,13 +23,7 @@ const BurgerBuilder = ({
   const [purchasing, setPurchasing] = useState(false);
 
   const updatePurchaseState = (ingredients) => {
-    const sum = Object.keys(ingredients)
-      .map((igKey) => {
-        return ingredients[igKey];
-      })
-      .reduce((sum, el) => {
-        return sum + el;
-      }, 0);
+    const sum = ingredients.reduce((acc, ing) => acc + ing.amount, 0);
     return sum > 0;
   };
 
@@ -49,13 +43,10 @@ const BurgerBuilder = ({
     setPurchasing(true);
   };
 
-  const disabledInfo = {
-    ...ings,
-  };
-
-  for (let key in disabledInfo) {
-    disabledInfo[key] = disabledInfo[key] <= 0;
-  }
+  const disabledInfo = ings.reduce(
+    (acc, ing) => ({ ...acc, [ing.name]: ing.amount <= 0 }),
+    {}
+  );
 
   return (
     <>
