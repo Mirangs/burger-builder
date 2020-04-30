@@ -35,26 +35,22 @@ export const auth = (email, password, isSignup) => {
     const authData = {
       email,
       password,
-      returnSecureToken: true,
     };
 
-    let url =
-      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCK4DjjCMvX9iojDU7Ptnxqeki2yovdiXE';
+    let url = '/api/auth/register';
 
     if (!isSignup) {
-      url =
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCK4DjjCMvX9iojDU7Ptnxqeki2yovdiXE';
+      url = '/api/auth/login';
     }
 
     axios
       .post(url, authData)
       .then((res) => {
-        sessionStorage.setItem('idToken', res.data.idToken);
-        dispatch(authSuccess(res.data.idToken, res.data.localId));
-        dispatch(checkAuthTimeout(res.data.expiresIn));
+        sessionStorage.setItem('token', res.data.token);
+        dispatch(authSuccess(res.data.token, res.data.user.id));
       })
       .catch((err) => {
-        dispatch(authFail(err));
+        dispatch(authFail(err.response.data.err));
       });
   };
 };

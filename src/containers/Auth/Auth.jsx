@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { message } from 'antd';
 
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
@@ -41,6 +42,12 @@ const Auth = ({ onAuth, loading, err }) => {
       touched: false,
     },
   });
+
+  useEffect(() => {
+    if (err) {
+      message.error(err);
+    }
+  }, [err]);
 
   const [isSignup, setIsSignup] = useState(false);
 
@@ -137,7 +144,6 @@ const Auth = ({ onAuth, loading, err }) => {
           <Button clicked={switchAuthModeHandler} btnType="Danger">
             SWITCH TO {isSignup ? 'SIGNIN' : 'SIGNUP'}
           </Button>
-          {err && <p>{err.message}</p>}
         </>
       )}
     </div>

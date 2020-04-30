@@ -31,7 +31,7 @@ const authFail = (state, action) => {
 };
 
 const authLogout = (state, action) => {
-  sessionStorage.removeItem('idToken');
+  sessionStorage.removeItem('token');
   return updateObject(state, {
     token: null,
     userId: null,
