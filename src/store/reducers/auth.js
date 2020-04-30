@@ -23,6 +23,13 @@ const authSuccess = (state, action) => {
   });
 };
 
+const registerSuccess = (state, acition) => {
+  return updateObject(state, {
+    error: null,
+    loading: false,
+  });
+};
+
 const authFail = (state, action) => {
   return updateObject(state, {
     err: action.err,
@@ -49,6 +56,8 @@ const reducer = (state = initialState, action) => {
       return authFail(state, action);
     case actionTypes.AUTH_LOGOUT:
       return authLogout(state, action);
+    case actionTypes.REGISTER_SUCCESS:
+      return registerSuccess(state, action);
     default:
       return state;
   }

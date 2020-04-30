@@ -75,7 +75,7 @@ const BurgerBuilder = ({
         <Spinner />
       )}
 
-      {!authenticated && <Redirect to="/auth" />}
+      {!authenticated && <Redirect to="/login" />}
     </>
   );
 };

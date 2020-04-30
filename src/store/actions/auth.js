@@ -54,3 +54,39 @@ export const auth = (email, password, isSignup) => {
       });
   };
 };
+
+export const registerSuccess = () => ({
+  type: actionTypes.REGISTER_SUCCESS,
+});
+
+export const login = (email, password) => {
+  return (displatch) => {
+    displatch(authStart());
+    const authData = {
+      email,
+      password,
+    };
+
+    axios
+      .post('/api/auth/login', authData)
+      .then((res) => {
+        sessionStorage.setItem('token', res.data.token);
+        displatch(authSuccess(res.data.token, res.data.user.id));
+      })
+      .catch((err) => {
+        displatch(authFail(err.response.data.err));
+      });
+  };
+};
+
+export const register = (userData) => {
+  return (dispatch) => {
+    dispatch(authStart());
+    axios
+      .post('/api/auth/register', userData)
+      .then((res) => {
+        dispatch(registerSuccess());
+      })
+      .catch((err) => dispatch(authFail(err.response.data.err)));
+  };
+};

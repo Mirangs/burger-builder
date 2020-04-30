@@ -7,7 +7,8 @@ import Layout from './containers/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 import Checkout from './containers/Checkout/Checkout';
 import Orders from './containers/Orders/Orders';
-import Auth from './containers/Auth/Auth';
+import Login from './containers/Auth/Login/Login';
+import Register from './containers/Auth/Register/Register';
 
 import { authSuccess } from './store/actions/auth';
 
@@ -34,10 +35,11 @@ const App = () => {
             <Route path="/checkout" component={Checkout} />
             <Route path="/orders" component={Orders} />
             <Route path="/" exact component={BurgerBuilder} />
-            <Route path="/auth" component={Auth} />
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
           </Switch>
 
-          <Redirect to={authenticated ? '/' : '/auth'} />
+          <Redirect to={authenticated ? '/' : '/login'} />
         </Layout>
       </BrowserRouter>
     </>
