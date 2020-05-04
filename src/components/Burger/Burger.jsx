@@ -3,17 +3,22 @@ import React from 'react';
 import './Burger.css';
 
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
+import { useState } from 'react';
 
 const Burger = ({ ingredients }) => {
+  let isEmpty = true;
+
   let transformedIngredients = ingredients.reduce((acc, ing, ind) => {
     const res = [];
     for (let i = 0; i < ing.amount; i++) {
+      isEmpty = false;
       res.push(<BurgerIngredient key={i + ind} type={ing.name} />);
     }
-    return acc.concat([...res]);
+
+    return [...acc, res];
   }, []);
 
-  if (transformedIngredients.length === 0) {
+  if (isEmpty) {
     transformedIngredients = <p>Please start adding ingredients!</p>;
   }
 
