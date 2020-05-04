@@ -64,6 +64,12 @@ const fetchIngredientsFailed = (state, action) => {
   });
 };
 
+const setTotalPrice = (state, action) => {
+  return updateObject(state, {
+    totalPrice: action.price,
+  });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.ADD_INGREDIENT:
@@ -74,6 +80,8 @@ const reducer = (state = initialState, action) => {
       return setIngredients(state, action);
     case actionTypes.FETCH_INGREDIENTS_FAILED:
       return fetchIngredientsFailed(state, action);
+    case actionTypes.SET_TOTAL_PRICE:
+      return setTotalPrice(state, action);
     default:
       return state;
   }

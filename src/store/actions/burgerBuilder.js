@@ -25,6 +25,11 @@ export const fetchIngredientsFailed = () => {
   };
 };
 
+export const setTotalPrice = (price) => ({
+  type: actionTypes.SET_TOTAL_PRICE,
+  price,
+});
+
 export const initIngredients = () => {
   return async (dispatch) => {
     try {

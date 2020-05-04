@@ -22,6 +22,7 @@ const ContactData = ({
   loading,
   purchased,
   token,
+  setTotalPrice,
 }) => {
   const [form] = Form.useForm();
   const [countries, setCountries] = useState([]);
@@ -68,6 +69,7 @@ const ContactData = ({
       id,
     };
     onOrderBurger(request);
+    setTotalPrice(4);
     message.success(
       'Your order was successfully created! Expect an order soon'
     );
@@ -193,6 +195,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onOrderBurger: (orderData, token) =>
     dispatch(actions.purchaseBurger(orderData, token)),
+  setTotalPrice: (price) => dispatch(actions.setTotalPrice(price)),
 });
 
 export default connect(

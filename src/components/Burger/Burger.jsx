@@ -3,7 +3,6 @@ import React from 'react';
 import './Burger.css';
 
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
-import { useState } from 'react';
 
 const Burger = ({ ingredients }) => {
   let isEmpty = true;
