@@ -54,8 +54,8 @@ const Register = () => {
   const resetHandler = () => form.resetFields();
 
   return (
-    <Row>
-      <Col span={6} offset={8}>
+    <RegisterRow justify="center" align="center">
+      <Col span={24} lg={6}>
         {loading || dataLoading ? (
           <Spinner />
         ) : (
@@ -238,7 +238,7 @@ const Register = () => {
           </Form>
         )}
       </Col>
-    </Row>
+    </RegisterRow>
   );
 };
 
@@ -259,6 +259,10 @@ const RegisterButton = styled(Button)`
 const ResetButton = styled(Button)`
   width: 45%;
   margin-left: 10%;
+`;
+
+const RegisterRow = styled(Row)`
+  padding: 20px;
 `;
 
 export default Register;

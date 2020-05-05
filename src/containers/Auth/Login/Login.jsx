@@ -30,12 +30,17 @@ const Login = () => {
   };
 
   return (
-    <Row>
-      <Col span={6} offset={8}>
+    <LoginRow align="center" justify="center">
+      <Col span={24} lg={6}>
         {loading ? (
           <Spinner />
         ) : (
-          <Form name="login" layout="vertical" onFinish={submitHandler}>
+          <Form
+            name="login"
+            layout="vertical"
+            onFinish={submitHandler}
+            style={{ width: '100%' }}
+          >
             <Form.Item
               label="Email"
               name="email"
@@ -88,7 +93,7 @@ const Login = () => {
           </Form>
         )}
       </Col>
-    </Row>
+    </LoginRow>
   );
 };
 
@@ -104,6 +109,10 @@ const Spinner = styled(Spin)`
 
 const LoginButton = styled(Button)`
   width: 100%;
+`;
+
+const LoginRow = styled(Row)`
+  padding: 20px;
 `;
 
 export default Login;
