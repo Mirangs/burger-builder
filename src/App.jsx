@@ -9,6 +9,7 @@ import Checkout from './containers/Checkout/Checkout';
 import Orders from './containers/Orders/Orders';
 import Login from './containers/Auth/Login/Login';
 import Register from './containers/Auth/Register/Register';
+import ContactData from './containers/Checkout/ContactData/ContactData';
 
 import { authSuccess } from './store/actions/auth';
 
@@ -32,6 +33,7 @@ const App = () => {
       <BrowserRouter>
         <Layout>
           <Switch>
+            <Route path="/checkout/contact-data" component={ContactData} />
             <Route path="/checkout" component={Checkout} />
             <Route path="/orders" component={Orders} />
             <Route path="/" exact component={BurgerBuilder} />

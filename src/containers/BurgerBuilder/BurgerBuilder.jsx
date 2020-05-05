@@ -19,6 +19,7 @@ const BurgerBuilder = ({
   onInitIngredients,
   history,
   authenticated,
+  setTotalPrice,
 }) => {
   const [purchasing, setPurchasing] = useState(false);
 
@@ -29,7 +30,8 @@ const BurgerBuilder = ({
 
   useEffect(() => {
     onInitIngredients();
-  }, [onInitIngredients]);
+    setTotalPrice(4);
+  }, [onInitIngredients, setTotalPrice]);
 
   const purchaseCancelHandler = () => {
     setPurchasing(false);
@@ -91,6 +93,7 @@ const mapDispatchToProps = (dispatch) => ({
   onIngredientAdded: (ingName) => dispatch(actions.addIngredient(ingName)),
   onIngredientRemoved: (ingName) => dispatch(actions.removeIngredient(ingName)),
   onInitIngredients: () => dispatch(actions.initIngredients()),
+  setTotalPrice: (price) => dispatch(actions.setTotalPrice(price)),
 });
 
 export default connect(

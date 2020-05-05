@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
-import ContactData from '../Checkout/ContactData/ContactData';
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
 import * as actions from '../../store/actions/';
 
-const Checkout = ({
-  ingredients,
-  match,
-  history,
-  onPurchaseInit,
-  purchased,
-}) => {
+const Checkout = () => {
   const [visible, setVisible] = useState(true);
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  const { ingredients, purchased } = useSelector((state) => ({
+    ingredients: state.burgerBuilder.ingredients,
+    purchased: state.order.purchased,
+  }));
 
   const onCheckoutCancelled = () => {
-    history.goBack();
+    history.push('/');
   };
+
+  if (ingredients.length === 0 || purchased) {
+    onCheckoutCancelled();
+  }
 
   const onCheckoutContinued = () => {
     history.push('/checkout/contact-data');
@@ -25,32 +29,19 @@ const Checkout = ({
   };
 
   useEffect(() => {
-    onPurchaseInit();
-  }, [onPurchaseInit]);
+    dispatch(actions.purchaseInit());
+  }, [dispatch]);
 
   return (
     <div>
-      {ingredients.length === 0 || purchased ? (
-        <Redirect to="/" />
-      ) : (
-        <CheckoutSummary
-          visible={visible}
-          ingredients={ingredients}
-          onCheckoutCancelled={onCheckoutCancelled}
-          onCheckoutContinued={onCheckoutContinued}
-        />
-      )}
-      <Route path={match.path + '/contact-data'} component={ContactData} />
+      <CheckoutSummary
+        visible={visible}
+        ingredients={ingredients}
+        onCheckoutCancelled={onCheckoutCancelled}
+        onCheckoutContinued={onCheckoutContinued}
+      />
     </div>
   );
 };
 
-const mapStateToProps = (state) => ({
-  ingredients: state.burgerBuilder.ingredients,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onPurchaseInit: () => dispatch(actions.purchaseInit()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Checkout);
+export default Checkout;
