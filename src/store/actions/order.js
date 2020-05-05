@@ -55,6 +55,7 @@ export const fetchOrders = (id) => {
       .get(`/api/order/${id}`)
       .then((res) => {
         const fetchedOrders = [];
+        // eslint-disable-next-line
         for (let key in res.data) {
           fetchedOrders.push({
             ...res.data[key],
