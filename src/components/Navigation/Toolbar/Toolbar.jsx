@@ -1,14 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 import Logo from '../../Logo/Logo';
 import NavigationItems from '../NavigationItems/NavigationItems';
 import DrawerToggle from '../SideDrawer/DrawerToggle/DrawerToggle';
 
 const Toolbar = ({ onOpened }) => {
+  const { authenticated } = useSelector((state) => ({
+    authenticated: state.auth.authenticated,
+  }));
+
   return (
     <Header>
-      <DrawerToggle clicked={onOpened} />
+      {authenticated && <DrawerToggle clicked={onOpened} />}
       <Logo height="80%" />
       <nav className="DesktopOnly">
         <NavigationItems />

@@ -8,7 +8,8 @@
   color: #8F5C2C;
   text-decoration: none;
   width: 100%;
-  padding: 16px 10px;
+  padding: 0 16px 10px 0;
+  font-size: 1.5rem;
   box-sizing: border-box;
   display: block;
   transition: all 0.3s;
@@ -30,6 +31,7 @@
   }
   
   .NavigationItem a {
+    padding-top: 0;
     color: #FFFFFF;
     height: 100%;
     padding: 16px 10px;

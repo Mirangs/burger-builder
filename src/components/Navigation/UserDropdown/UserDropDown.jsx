@@ -45,22 +45,32 @@ const UserDropDown = () => {
 const UserName = styled(Text)`
   color: #fff;
   cursor: pointer;
+
+  @media (max-width: 720px) {
+    color: #000;
+    margin-bottom: 10px;
+  }
 `;
 
 const BrownMenu = styled(Menu)`
-  background-color: #703b09;
+  @media (min-width: 720px) {
+    background-color: #703b09;
 
-  .ant-dropdown-menu-item:hover {
-    color: #cf8f2e;
+    .ant-dropdown-menu-item:hover {
+      color: #cf8f2e;
+    }
   }
 `;
 
 const WhiteColorButton = styled(Button)`
-  color: #fff;
   width: 100%;
 
-  &:hover {
-    color: #cf8f2e;
+  @media (min-width: 720px) {
+    color: #fff;
+
+    &:hover {
+      color: #cf8f2e;
+    }
   }
 `;
 
