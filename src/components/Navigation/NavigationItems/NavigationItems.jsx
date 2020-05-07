@@ -34,7 +34,14 @@ const NavigationItemsWrapper = styled.div`
   flex-direction: column-reverse;
 
   @media (min-width: 720px) {
-    flex-direction: column;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+
+    .ant-dropdown-trigger {
+      margin-left: auto;
+    }
   }
 `;
 
