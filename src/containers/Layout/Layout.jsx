@@ -19,14 +19,13 @@ const Layout = ({ children }) => {
     <>
       <Toolbar onOpened={onSideDrawerOpened} />
       <SideDrawer isOpened={isSideDrawerOpened} onClosed={onSideDrawerClosed} />
-      <div>SideDrawer, Backdrop</div>
       <Content>{children}</Content>
     </>
   );
 };
 
 const Content = styled.div`
-  margin-top: 72px;
+  margin-top: 56px;
 `;
 
 export default Layout;

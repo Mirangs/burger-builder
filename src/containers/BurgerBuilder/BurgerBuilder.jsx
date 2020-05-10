@@ -45,7 +45,7 @@ const BurgerBuilder = () => {
   };
 
   return (
-    <>
+    <BurgerBuilderWrapper>
       <OrderSummary
         visible={purchasing}
         ingredients={ings}
@@ -70,7 +70,7 @@ const BurgerBuilder = () => {
       )}
 
       {!authenticated && history.push('/login')}
-    </>
+    </BurgerBuilderWrapper>
   );
 };
 
@@ -88,6 +88,10 @@ export const BurgerWrapper = styled.div`
     width: 700px;
     height: 600px;
   }
+`;
+
+const BurgerBuilderWrapper = styled.div`
+  padding-top: 20px;
 `;
 
 export default withErrorHandler(BurgerBuilder, axios);

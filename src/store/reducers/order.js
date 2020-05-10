@@ -5,6 +5,7 @@ const initialState = {
   orders: [],
   loading: false,
   purchased: false,
+  total: 0,
 };
 
 const purchaseBurgerStart = (state, action) => {
@@ -43,6 +44,10 @@ const fetchOrdersFail = (state, action) => {
   return updateObject(state, { loading: false });
 };
 
+const setTotalOrders = (state, action) => {
+  return updateObject(state, { total: action.total });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.PURCHASE_BURGER_START:
@@ -59,6 +64,8 @@ const reducer = (state = initialState, action) => {
       return fetchOrdersSuccess(state, action);
     case actionTypes.FETCH_ORDERS_FAIL:
       return fetchOrdersFail(state, action);
+    case actionTypes.SET_TOTAL_ORDERS:
+      return setTotalOrders(state, action);
     default:
       return state;
   }

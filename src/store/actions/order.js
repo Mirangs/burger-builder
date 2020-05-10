@@ -48,21 +48,21 @@ export const fetchOrdersStart = () => ({
   type: actionTypes.FETCH_ORDERS_START,
 });
 
-export const fetchOrders = (id) => {
+export const setTotalOrders = (total) => ({
+  type: actionTypes.SET_TOTAL_ORDERS,
+  total,
+});
+
+export const fetchOrders = ({ id, limit, offset, orderBy }) => {
   return (dispatch) => {
     dispatch(fetchOrdersStart());
     axios
-      .get(`/api/order/${id}`)
+      .get(
+        `/api/order/${id}?limit=${limit}&&offset=${offset}&&orderBy=${orderBy}`
+      )
       .then((res) => {
-        const fetchedOrders = [];
-        // eslint-disable-next-line
-        for (let key in res.data) {
-          fetchedOrders.push({
-            ...res.data[key],
-            id: key,
-          });
-        }
-        dispatch(fetchOrdersSuccess(fetchedOrders));
+        dispatch(setTotalOrders(parseInt(res.data.count)));
+        dispatch(fetchOrdersSuccess(res.data.orders));
       })
       .catch((err) => {
         dispatch(fetchOrdersFail(err));
