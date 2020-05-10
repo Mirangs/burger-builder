@@ -52,11 +52,18 @@ const Orders = () => {
 
   let output = <Spinner />;
   if (!loading) {
-    output = filterOrders(orders).map(({ id, ingredients, total_price }) => (
-      <Col lg={8} xs={20} key={id}>
-        <Order ingredients={ingredients} totalPrice={total_price} />
-      </Col>
-    ));
+    output = filterOrders(orders).map(
+      ({ id, ingredients, total_price, order_date, order_status }) => (
+        <Col lg={8} xs={20} key={id}>
+          <Order
+            ingredients={ingredients}
+            totalPrice={total_price}
+            date={new Date(order_date).toLocaleString()}
+            status={order_status}
+          />
+        </Col>
+      )
+    );
   }
 
   return (

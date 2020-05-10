@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Tag, Row, Col, Button } from 'antd';
+import { Tag, Row, Col, Button, Typography } from 'antd';
 
 import Burger from '../Burger/Burger';
 
-const Order = ({ ingredients, totalPrice }) => {
+const { Paragraph } = Typography;
+
+const Order = ({ ingredients, totalPrice, date, status }) => {
   const ingredientOutput = ingredients.map((ig) => {
     return (
       <Tag key={ig.name} color="blue">
@@ -22,12 +24,18 @@ const Order = ({ ingredients, totalPrice }) => {
           <p>
             Price: <strong>${totalPrice}</strong>
           </p>
+          <p>
+            Status: <strong>{status}</strong>
+          </p>
         </Col>
         <BurgerWrapper lg={10} xs={24}>
           <Burger ingredients={ingredients} />
         </BurgerWrapper>
         <Col lg={12} xs={24}>
           <OrderButton type="primary">Order again</OrderButton>
+        </Col>
+        <Col lg={12} xs={24}>
+          <OrderDate>Order Date: {date}</OrderDate>
         </Col>
       </Row>
     </OrderWrapper>
@@ -52,6 +60,12 @@ const OrderButton = styled(Button)`
 
 const BurgerWrapper = styled(Col)`
   height: 150px;
+`;
+
+const OrderDate = styled(Paragraph)`
+  margin: 1rem 0 0 0 !important;
+  padding-left: 5px;
+  line-height: 32px;
 `;
 
 export default Order;
