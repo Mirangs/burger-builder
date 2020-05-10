@@ -29,7 +29,7 @@ const Orders = () => {
   const filterOrders = (orders) =>
     orders
       .filter((order) =>
-        order.ingredients.some((ing) => filter.ingredients.includes(ing.name))
+        order.ingredients.every((ing) => filter.ingredients.includes(ing.name))
       )
       .sort((a, b) =>
         filter.order === 'asc'
