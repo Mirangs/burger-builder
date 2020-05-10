@@ -1,8 +1,7 @@
 import React from 'react';
 
-import './Burger.css';
-
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
+import styled from 'styled-components';
 
 const Burger = ({ ingredients }) => {
   let isEmpty = true;
@@ -22,12 +21,22 @@ const Burger = ({ ingredients }) => {
   }
 
   return (
-    <div className="Burger">
+    <BurgerWrapper>
       <BurgerIngredient type="bread-top" />
       {transformedIngredients}
       <BurgerIngredient type="bread-bottom" />
-    </div>
+    </BurgerWrapper>
   );
 };
+
+const BurgerWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  overflow: scroll;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+`;
 
 export default Burger;

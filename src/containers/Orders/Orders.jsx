@@ -1,42 +1,39 @@
 import React, { useEffect } from 'react';
 import axios from '../../axios-order';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Row, Col } from 'antd';
 
 import Order from '../../components/Order/Order';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../HOC/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/';
 
-import './Orders.css';
+const Orders = () => {
+  const dispatch = useDispatch();
+  const { orders, loading, id } = useSelector((state) => ({
+    orders: state.order.orders,
+    loading: state.order.loading,
+    id: state.auth.userId,
+  }));
 
-const Orders = ({ orders, loading, onFetchOrders, id }) => {
   useEffect(() => {
-    onFetchOrders(id);
-  }, [id, onFetchOrders]);
+    dispatch(actions.fetchOrders(id));
+  }, [dispatch, id]);
 
   let output = <Spinner />;
   if (!loading) {
     output = orders.map(({ id, ingredients, total_price }) => (
-      <li key={id}>
-        <Order ingredients={ingredients} totalPrice={total_price} />
-      </li>
+      <Col span={8}>
+        <Order key={id} ingredients={ingredients} totalPrice={total_price} />
+      </Col>
     ));
   }
 
-  return <ul className="Orders">{output}</ul>;
+  return (
+    <Row justify="center" align="middle" gutter={[16, 16]}>
+      {output}
+    </Row>
+  );
 };
 
-const mapStateToProps = (state) => ({
-  orders: state.order.orders,
-  loading: state.order.loading,
-  id: state.auth.userId,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onFetchOrders: (id) => dispatch(actions.fetchOrders(id)),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withErrorHandler(Orders, axios));
+export default withErrorHandler(Orders, axios);

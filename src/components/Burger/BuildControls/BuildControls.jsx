@@ -1,4 +1,7 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+import * as actions from '../../../store/actions';
 import BuildControl from './BuildControl/BuildControl';
 
 import './BuildControls.css';
@@ -10,40 +13,48 @@ const controls = [
   { label: 'Meat', type: 'meat' },
 ];
 
-const BuildControls = ({ 
-  ingredientAdded, 
-  ingredientRemoved, 
-  disabled, 
-  totalPrice, 
-  purchasable, 
-  onPurchasing 
-}) => {
-  return(
-    <section className="BuildControls">
+const BuildControls = ({ purchasable, onPurchasing }) => {
+  const dispatch = useDispatch();
+  const { ings, totalPrice } = useSelector((state) => ({
+    ings: state.burgerBuilder.ingredients,
+    totalPrice: state.burgerBuilder.totalPrice,
+  }));
 
-      <p>Current Price: <strong>{totalPrice}$</strong></p>
+  const disabled = ings.reduce(
+    (acc, ing) => ({ ...acc, [ing.name]: ing.amount <= 0 }),
+    {}
+  );
+
+  return (
+    <section className="BuildControls">
+      <p>
+        Current Price: <strong>{totalPrice}$</strong>
+      </p>
 
       <ul>
-        {controls.map(control => (
+        {controls.map((control) => (
           <li key={control.label}>
             <BuildControl
               label={control.label}
-              ingredientAdded={() => ingredientAdded(control.type)}
-              ingredientRemoved={() => ingredientRemoved(control.type)}
+              ingredientAdded={() =>
+                dispatch(actions.addIngredient(control.type))
+              }
+              ingredientRemoved={() =>
+                dispatch(actions.removeIngredient(control.type))
+              }
               disabled={disabled[control.type]}
             />
           </li>
         ))}
       </ul>
 
-      <button 
+      <button
         className="OrderButton"
         disabled={!purchasable}
         onClick={onPurchasing}
       >
         Order Now!
       </button>
-
     </section>
   );
 };

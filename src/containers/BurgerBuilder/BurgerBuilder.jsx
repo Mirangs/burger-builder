@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from '../../axios-order';
-import { Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
@@ -9,19 +9,18 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../HOC/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/';
+import styled from 'styled-components';
 
-const BurgerBuilder = ({
-  err,
-  ings,
-  totalPrice,
-  onIngredientAdded,
-  onIngredientRemoved,
-  onInitIngredients,
-  history,
-  authenticated,
-  setTotalPrice,
-}) => {
+const BurgerBuilder = () => {
   const [purchasing, setPurchasing] = useState(false);
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const { ings, totalPrice, err, authenticated } = useSelector((state) => ({
+    ings: state.burgerBuilder.ingredients,
+    totalPrice: state.burgerBuilder.totalPrice,
+    err: state.burgerBuilder.err,
+    authenticated: state.auth.authenticated,
+  }));
 
   const updatePurchaseState = (ingredients) => {
     const sum = ingredients.reduce((acc, ing) => acc + ing.amount, 0);
@@ -29,9 +28,9 @@ const BurgerBuilder = ({
   };
 
   useEffect(() => {
-    onInitIngredients();
-    setTotalPrice(4);
-  }, [onInitIngredients, setTotalPrice]);
+    dispatch(actions.initIngredients());
+    dispatch(actions.setTotalPrice(4));
+  }, [dispatch]);
 
   const purchaseCancelHandler = () => {
     setPurchasing(false);
@@ -45,11 +44,6 @@ const BurgerBuilder = ({
     setPurchasing(true);
   };
 
-  const disabledInfo = ings.reduce(
-    (acc, ing) => ({ ...acc, [ing.name]: ing.amount <= 0 }),
-    {}
-  );
-
   return (
     <>
       <OrderSummary
@@ -61,13 +55,11 @@ const BurgerBuilder = ({
       />
       {Object.keys(ings).length !== 0 ? (
         <>
-          <Burger ingredients={ings} />
+          <BurgerWrapper>
+            <Burger ingredients={ings} />
+          </BurgerWrapper>
           <BuildControls
-            ingredientAdded={onIngredientAdded}
-            ingredientRemoved={onIngredientRemoved}
-            disabled={disabledInfo}
             purchasable={updatePurchaseState(ings)}
-            totalPrice={totalPrice}
             onPurchasing={purchasingHandler}
           />
         </>
@@ -77,26 +69,25 @@ const BurgerBuilder = ({
         <Spinner />
       )}
 
-      {!authenticated && <Redirect to="/login" />}
+      {!authenticated && history.push('/login')}
     </>
   );
 };
 
-const mapStateToProps = (state) => ({
-  ings: state.burgerBuilder.ingredients,
-  totalPrice: state.burgerBuilder.totalPrice,
-  err: state.burgerBuilder.err,
-  authenticated: state.auth.authenticated,
-});
+export const BurgerWrapper = styled.div`
+  width: 350px;
+  height: 300px;
+  margin: 0 auto;
 
-const mapDispatchToProps = (dispatch) => ({
-  onIngredientAdded: (ingName) => dispatch(actions.addIngredient(ingName)),
-  onIngredientRemoved: (ingName) => dispatch(actions.removeIngredient(ingName)),
-  onInitIngredients: () => dispatch(actions.initIngredients()),
-  setTotalPrice: (price) => dispatch(actions.setTotalPrice(price)),
-});
+  @media (min-width: 500px) {
+    width: 450px;
+    height: 400px;
+  }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(withErrorHandler(BurgerBuilder, axios));
+  @media (min-width: 1000px) {
+    width: 700px;
+    height: 600px;
+  }
+`;
+
+export default withErrorHandler(BurgerBuilder, axios);

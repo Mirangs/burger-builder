@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Button, Typography, Modal } from 'antd';
 
 import Burger from '../../Burger/Burger';
+import { BurgerWrapper } from '../../../containers/BurgerBuilder/BurgerBuilder';
 
 const { Title } = Typography;
 
@@ -25,7 +26,9 @@ const CheckoutSummary = ({
       ]}
     >
       <ChecoutTitle level={3}>We hope it tastes well!</ChecoutTitle>
-      <Burger ingredients={ingredients} />
+      <BurgerWrapper>
+        <Burger ingredients={ingredients} />
+      </BurgerWrapper>
     </CheckoutModal>
   );
 };
