@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import * as R from 'ramda';
 import { connect, useSelector } from 'react-redux';
 import axios from '../../../axios-order';
@@ -23,7 +23,9 @@ const ContactData = ({
   purchased,
   token,
   setTotalPrice,
+  onInitIngredients,
 }) => {
+  const history = useHistory();
   const [form] = Form.useForm();
   const [countries, setCountries] = useState([]);
   const [initialValues, setInitialValues] = useState([]);
@@ -73,6 +75,10 @@ const ContactData = ({
     message.success(
       'Your order was successfully created! Expect an order soon'
     );
+    onInitIngredients();
+    setTimeout(() => {
+      history.push('/');
+    }, 500);
   };
 
   const resetHandler = () => form.resetFields();
@@ -196,6 +202,7 @@ const mapDispatchToProps = (dispatch) => ({
   onOrderBurger: (orderData, token) =>
     dispatch(actions.purchaseBurger(orderData, token)),
   setTotalPrice: (price) => dispatch(actions.setTotalPrice(price)),
+  onInitIngredients: () => dispatch(actions.initIngredients()),
 });
 
 export default connect(

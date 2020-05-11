@@ -69,9 +69,6 @@ const Orders = () => {
   return (
     <>
       <OrdersControls filter={filter} onFilterChange={onFilterChange} />
-      <OrdersList justify="center" align="start" gutter={[10, 10]}>
-        {output}
-      </OrdersList>
       <Pagination
         defaultPageSize={9}
         defaultCurrent={1}
@@ -79,6 +76,9 @@ const Orders = () => {
         onChange={onPageChange}
         hideOnSinglePage
       />
+      <OrdersList justify="center" align="start" gutter={[10, 10]}>
+        {output}
+      </OrdersList>
     </>
   );
 };
