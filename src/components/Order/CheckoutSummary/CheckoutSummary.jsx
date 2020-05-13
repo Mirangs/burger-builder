@@ -19,8 +19,10 @@ const CheckoutSummary = ({
       centered
       onCancel={onCheckoutCancelled}
       footer={[
-        <Button onClick={onCheckoutCancelled}>Cancel</Button>,
-        <Button type="primary" onClick={onCheckoutContinued}>
+        <Button key="cancel" onClick={onCheckoutCancelled}>
+          Cancel
+        </Button>,
+        <Button key="continue" type="primary" onClick={onCheckoutContinued}>
           Continue
         </Button>,
       ]}
